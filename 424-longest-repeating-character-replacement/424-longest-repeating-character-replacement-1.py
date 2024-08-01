@@ -5,35 +5,17 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        def count_non_matching(s):
-            if not s:
-                return 0
-            
-            first_char = s[0]
-            count = 0
-            
-            for char in s:
-                if char != first_char:
-                    count += 1
-            
-            return count
+        # solution : O(26 * n)
+        longest = 0
+        counts = {}
 
         left = 0
-        right = 1
+        for right in range(len(s)):
+            counts[s[right]] = 1 + counts.get(s[right], 0)
+            while (right - left + 1) - max(counts.values()) > k:
+                counts[s[left]] -= 1
+                left += 1
+            
+            longest = max(longest, (right - left + 1))
 
-        longest = 0
-
-        while right < len(s):
-            count = count_non_matching(s[left:right+1])
-            if count <= k:
-                longest = max(longest, len(s[left:right+1]))
-                right += 1
-
-            else:
-                left +=1 
-                right = left + 1
-
-        
         return longest
-    
-### THIS IS WRONG
