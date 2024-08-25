@@ -10,20 +10,17 @@ class Node:
 from typing import Optional
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
-        created = {}
+        orig_to_clone = {}
 
-        def dfs_clone(n):
+        def dfs(node):
+            if node in orig_to_clone:
+                return orig_to_clone[node]
 
-            if n in created:
-                return created[n]
-            
-            clone = Node(n.val)
-            created[n] = clone
+            orig_to_clone[node] = Node(node.val)
 
-            for neighbor in n.neighbors:
-                clone.neighbors.append(dfs_clone(neighbor))
+            for neigh in node.neighbors:
+                orig_to_clone[node].neighbors.append(dfs(neigh))
 
-            return clone
-        
-
-        return dfs_clone(node) if node else None
+            return orig_to_clone[node]
+                
+        return dfs(node) if node else None
